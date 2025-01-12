@@ -3,4 +3,5 @@ Knowledge Graph representation of United Nations Global Climate Fund project/pro
 
 ## Tabular DB schema
 
-![GCF_schema](https://github.com/user-attachments/assets/99f5db11-f600-4a3c-a116-f74800bc7ba6)
+![GCF_schema](https://github.com/user-attachments/assets/1fd4e56f-af93-4fb2-a9c0-3a6e65b0e35d)
+
