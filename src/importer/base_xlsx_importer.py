@@ -21,6 +21,29 @@ class BaseXlsxImporter:
             if col.name != "id"
         ]
 
+    def _get_id_mapper(self, table_class: Type[DeclarativeMeta]) -> bool:
+        """General helper to get a name to ID mapper for any given table class.
+
+        Args:
+            table_class (Type[DeclarativeMeta]): The SQLAlchemy ORM table class
+
+        Returns:
+            bool: True after completion.
+        """
+
+        # Create name to ID mapping dictionary
+        with self.db_handler.get_session() as session:
+            mapper = {
+                getattr(item, "name"): getattr(item, "id")
+                for item in session.query(table_class).all()
+            }
+
+        # Assign the mapper to the corresponding instance variable
+        var_name = f"{table_class.__name__.lower().replace('dict', '')}"
+        setattr(self, f"{var_name}_id_mapper", mapper)
+
+        return True
+
     def _read_xlsx(self, file_path: str) -> pd.DataFrame:
         """Helper method to read in an XLSX data export file as a dataframe
 
