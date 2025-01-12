@@ -64,7 +64,8 @@ class BaseCsvImporter:
         return False
 
     def import_csv(self, file_path: str) -> bool:
-        """High-level main method to import a CSV into the database
+        """High-level main method to import a CSV data dictionary into the
+        database
 
         Args:
             file_path (str): Path to the CSV file
