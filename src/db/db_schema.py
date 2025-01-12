@@ -13,7 +13,7 @@ class Base(DeclarativeBase):
 class Project(Base):
     __tablename__ = "project"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     ref: Mapped[str] = mapped_column(nullable=False)
     modality_id: Mapped[int] = mapped_column(
         ForeignKey("modality_dict.id"), nullable=False
@@ -35,29 +35,39 @@ class Project(Base):
     )
     financing_usd: Mapped[int] = mapped_column(nullable=False)
 
-    entity: Mapped["Entity"] = relationship(
+    entities: Mapped[list["Entity"]] = relationship(
         "Entity", back_populates="projects"
     )
     countries: Mapped[list["Country"]] = relationship(
         "Country", secondary="country_project", back_populates="projects"
     )
-    modality: Mapped["ModalityDict"] = relationship("ModalityDict")
-    sector: Mapped["SectorDict"] = relationship("SectorDict")
-    theme: Mapped["ThemeDict"] = relationship("ThemeDict")
-    project_size: Mapped["ProjectSizeDict"] = relationship("ProjectSizeDict")
-    ess_category: Mapped["EssCategoryDict"] = relationship("EssCategoryDict")
+    modality: Mapped["ModalityDict"] = relationship(
+        "ModalityDict", back_populates="projects"
+    )
+    sector: Mapped["SectorDict"] = relationship(
+        "SectorDict", back_populates="projects"
+    )
+    theme: Mapped["ThemeDict"] = relationship(
+        "ThemeDict", back_populates="projects"
+    )
+    project_size: Mapped["ProjectSizeDict"] = relationship(
+        "ProjectSizeDict", back_populates="projects"
+    )
+    ess_category: Mapped["EssCategoryDict"] = relationship(
+        "EssCategoryDict", back_populates="projects"
+    )
 
 
 class Entity(Base):
     __tablename__ = "entity"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     code: Mapped[str] = mapped_column(nullable=False)
     name: Mapped[str] = mapped_column(nullable=False)
     country_id: Mapped[int] = mapped_column(
         ForeignKey("country.id"), nullable=False
     )
-    is_dae: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    is_DAE: Mapped[bool] = mapped_column(Boolean, nullable=False)
     entity_type_id: Mapped[int] = mapped_column(
         ForeignKey("entity_type_dict.id"), nullable=False
     )
@@ -72,10 +82,18 @@ class Entity(Base):
     projects: Mapped[list["Project"]] = relationship(
         "Project", secondary="entity_project", back_populates="entities"
     )
-    country: Mapped["Country"] = relationship("Country")
-    sector: Mapped["SectorDict"] = relationship("SectorDict")
-    entity_type: Mapped["EntityTypeDict"] = relationship("EntityTypeDict")
-    stage: Mapped["StageDict"] = relationship("StageDict")
+    country: Mapped["Country"] = relationship(
+        "Country", back_populates="entities"
+    )
+    sector: Mapped["SectorDict"] = relationship(
+        "SectorDict", back_populates="entities"
+    )
+    entity_type: Mapped["EntityTypeDict"] = relationship(
+        "EntityTypeDict", back_populates="entities"
+    )
+    stage: Mapped["StageDict"] = relationship(
+        "StageDict", back_populates="entities"
+    )
 
 
 class Region(Base):
@@ -85,11 +103,18 @@ class Region(Base):
     code: Mapped[str] = mapped_column(nullable=False)
     name: Mapped[str] = mapped_column(nullable=False)
 
+    countries: Mapped[list["Country"]] = relationship(
+        "Country", back_populates="region"
+    )
+    readinesses: Mapped[list["Readiness"]] = relationship(
+        "Readiness", back_populates="region"
+    )
+
 
 class Country(Base):
     __tablename__ = "country"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     iso3: Mapped[str] = mapped_column(nullable=False)
     name: Mapped[str] = mapped_column(nullable=False)
     region_id: Mapped[int] = mapped_column(ForeignKey("region.id"))
@@ -99,15 +124,24 @@ class Country(Base):
     projects: Mapped[list["Project"]] = relationship(
         "Project", secondary="country_project", back_populates="countries"
     )
+    entities: Mapped[list["Entity"]] = relationship(
+        "Entity", back_populates="country"
+    )
+    region: Mapped["Region"] = relationship(
+        "Region", back_populates="countries"
+    )
+    readinesses: Mapped[list["Readiness"]] = relationship(
+        "Readiness", back_populates="country"
+    )
 
 
 class Readiness(Base):
     __tablename__ = "readiness"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     ref: Mapped[str] = mapped_column(nullable=False)
-    readiness_type_id: Mapped[int] = mapped_column(
-        ForeignKey("readiness_type_dict.id"), nullable=False
+    activity_type_id: Mapped[int] = mapped_column(
+        ForeignKey("activity_type_dict.id"), nullable=False
     )
     name: Mapped[str] = mapped_column(nullable=False)
     country_id: Mapped[int] = mapped_column(
@@ -126,6 +160,19 @@ class Readiness(Base):
     approved_date: Mapped[datetime] = mapped_column(nullable=False)
     financing_usd: Mapped[int] = mapped_column(nullable=False)
 
+    country: Mapped["Country"] = relationship(
+        "Country", back_populates="readinesses"
+    )
+    region: Mapped["Region"] = relationship(
+        "Region", back_populates="readinesses"
+    )
+    activity_type: Mapped["ActivityTypeDict"] = relationship(
+        "ActivityTypeDict", back_populates="readinesses"
+    )
+    status: Mapped["ReadinessStatusDict"] = relationship(
+        "ReadinessStatusDict", back_populates="readinesses"
+    )
+
 
 # Data dictionaries
 class ModalityDict(Base):
@@ -134,12 +181,23 @@ class ModalityDict(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
 
+    projects: Mapped[list["Project"]] = relationship(
+        "Project", back_populates="modality"
+    )
+
 
 class SectorDict(Base):
     __tablename__ = "sector_dict"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
+
+    projects: Mapped[list["Project"]] = relationship(
+        "Project", back_populates="sector"
+    )
+    entities: Mapped[list["Entity"]] = relationship(
+        "Entity", back_populates="sector"
+    )
 
 
 class ThemeDict(Base):
@@ -148,12 +206,20 @@ class ThemeDict(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
 
+    projects: Mapped[list["Project"]] = relationship(
+        "Project", back_populates="theme"
+    )
+
 
 class ProjectSizeDict(Base):
     __tablename__ = "project_size_dict"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
+
+    projects: Mapped[list["Project"]] = relationship(
+        "Project", back_populates="project_size"
+    )
 
 
 class EssCategoryDict(Base):
@@ -162,12 +228,20 @@ class EssCategoryDict(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
 
+    projects: Mapped[list["Project"]] = relationship(
+        "Project", back_populates="ess_category"
+    )
+
 
 class EntityTypeDict(Base):
     __tablename__ = "entity_type_dict"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
+
+    entities: Mapped[list["Entity"]] = relationship(
+        "Entity", back_populates="entity_type"
+    )
 
 
 class StageDict(Base):
@@ -176,12 +250,20 @@ class StageDict(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
 
+    entities: Mapped[list["Entity"]] = relationship(
+        "Entity", back_populates="stage"
+    )
 
-class ReadinessTypeDict(Base):
-    __tablename__ = "readiness_type_dict"
+
+class ActivityTypeDict(Base):
+    __tablename__ = "activity_type_dict"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
+
+    readinesses: Mapped[list["Readiness"]] = relationship(
+        "Readiness", back_populates="activity_type"
+    )
 
 
 class ReadinessStatusDict(Base):
@@ -189,6 +271,10 @@ class ReadinessStatusDict(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
+
+    readinesses: Mapped[list["Readiness"]] = relationship(
+        "Readiness", back_populates="status"
+    )
 
 
 # Join tables
