@@ -96,28 +96,13 @@ class Entity(Base):
     )
 
 
-class Region(Base):
-    __tablename__ = "region"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    code: Mapped[str] = mapped_column(nullable=False)
-    name: Mapped[str] = mapped_column(nullable=False)
-
-    countries: Mapped[list["Country"]] = relationship(
-        "Country", back_populates="region"
-    )
-    readinesses: Mapped[list["Readiness"]] = relationship(
-        "Readiness", back_populates="region"
-    )
-
-
 class Country(Base):
     __tablename__ = "country"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     iso3: Mapped[str] = mapped_column(nullable=False)
     name: Mapped[str] = mapped_column(nullable=False)
-    region_id: Mapped[int] = mapped_column(ForeignKey("region.id"))
+    region_id: Mapped[int] = mapped_column(ForeignKey("region_dict.id"))
     is_sids: Mapped[bool] = mapped_column(Boolean)
     is_ldc: Mapped[bool] = mapped_column(Boolean)
 
@@ -127,8 +112,8 @@ class Country(Base):
     entities: Mapped[list["Entity"]] = relationship(
         "Entity", back_populates="country"
     )
-    region: Mapped["Region"] = relationship(
-        "Region", back_populates="countries"
+    region: Mapped["RegionDict"] = relationship(
+        "RegionDict", back_populates="countries"
     )
     readinesses: Mapped[list["Readiness"]] = relationship(
         "Readiness", back_populates="country"
@@ -149,7 +134,7 @@ class Readiness(Base):
     )
     delivery_partner: Mapped[str] = mapped_column(nullable=False)
     region_id: Mapped[int] = mapped_column(
-        ForeignKey("region.id"), nullable=False
+        ForeignKey("region_dict.id"), nullable=False
     )
     is_sids: Mapped[bool] = mapped_column(Boolean, nullable=False)
     is_ldc: Mapped[bool] = mapped_column(Boolean, nullable=False)
@@ -163,8 +148,8 @@ class Readiness(Base):
     country: Mapped["Country"] = relationship(
         "Country", back_populates="readinesses"
     )
-    region: Mapped["Region"] = relationship(
-        "Region", back_populates="readinesses"
+    region: Mapped["RegionDict"] = relationship(
+        "RegionDict", back_populates="readinesses"
     )
     activity_type: Mapped["ActivityTypeDict"] = relationship(
         "ActivityTypeDict", back_populates="readinesses"
@@ -175,6 +160,21 @@ class Readiness(Base):
 
 
 # Data dictionaries
+class RegionDict(Base):
+    __tablename__ = "region_dict"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False)
+
+    countries: Mapped[list["Country"]] = relationship(
+        "Country", back_populates="region"
+    )
+    readinesses: Mapped[list["Readiness"]] = relationship(
+        "Readiness", back_populates="region"
+    )
+
+
 class ModalityDict(Base):
     __tablename__ = "modality_dict"
 
