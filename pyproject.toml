@@ -1,0 +1,18 @@
+[project]
+name = "gcf-knowledge-graph"
+version = "0.1.0"
+description = "Creating a Neo4j knowledge graph of United Nations Global Climate Fund data"
+authors = [
+    {name = "Jangboo Lee",email = "github@jangboolee.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "sqlalchemy (>=2.0.37,<3.0.0)",
+    "neo4j (>=5.27.0,<6.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
