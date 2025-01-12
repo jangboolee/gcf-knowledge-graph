@@ -27,8 +27,8 @@ class Project(Base):
     theme_id: Mapped[int] = mapped_column(
         ForeignKey("theme_dict.id"), nullable=False
     )
-    project_size_id: Mapped[int] = mapped_column(
-        ForeignKey("project_size_dict.id"), nullable=True
+    size_id: Mapped[int] = mapped_column(
+        ForeignKey("size_dict.id"), nullable=True
     )
     ess_category_id: Mapped[int] = mapped_column(
         ForeignKey("ess_category_dict.id"), nullable=False
@@ -50,8 +50,8 @@ class Project(Base):
     theme: Mapped["ThemeDict"] = relationship(
         "ThemeDict", back_populates="projects"
     )
-    project_size: Mapped["ProjectSizeDict"] = relationship(
-        "ProjectSizeDict", back_populates="projects"
+    size: Mapped["SizeDict"] = relationship(
+        "SizeDict", back_populates="projects"
     )
     ess_category: Mapped["EssCategoryDict"] = relationship(
         "EssCategoryDict", back_populates="projects"
@@ -75,6 +75,9 @@ class Entity(Base):
         ForeignKey("stage_dict.id"), nullable=False
     )
     bm: Mapped[int] = mapped_column(nullable=False)
+    size_id: Mapped[int] = mapped_column(
+        ForeignKey("size_dict.id"), nullable=False
+    )
     sector_id: Mapped[int] = mapped_column(
         ForeignKey("sector_dict.id"), nullable=False
     )
@@ -85,14 +88,17 @@ class Entity(Base):
     country: Mapped["Country"] = relationship(
         "Country", back_populates="entities"
     )
-    sector: Mapped["SectorDict"] = relationship(
-        "SectorDict", back_populates="entities"
-    )
     entity_type: Mapped["EntityTypeDict"] = relationship(
         "EntityTypeDict", back_populates="entities"
     )
     stage: Mapped["StageDict"] = relationship(
         "StageDict", back_populates="entities"
+    )
+    size: Mapped["SizeDict"] = relationship(
+        "SizeDict", back_populates="entities"
+    )
+    sector: Mapped["SectorDict"] = relationship(
+        "SectorDict", back_populates="entities"
     )
 
 
@@ -211,14 +217,17 @@ class ThemeDict(Base):
     )
 
 
-class ProjectSizeDict(Base):
-    __tablename__ = "project_size_dict"
+class SizeDict(Base):
+    __tablename__ = "size_dict"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
 
     projects: Mapped[list["Project"]] = relationship(
-        "Project", back_populates="project_size"
+        "Project", back_populates="size"
+    )
+    entities: Mapped[list["Entity"]] = relationship(
+        "Entity", back_populates="size"
     )
 
 
