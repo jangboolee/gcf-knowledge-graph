@@ -18,17 +18,7 @@ class CountryExportImporter(BaseXlsxImporter):
             bool: True after completion
         """
 
-        # Create region name to ID mapping dictionary
-        with self.db_handler.get_session() as session:
-            mapper = {
-                region.name: region.id
-                for region in session.query(
-                    RegionDict.name, RegionDict.id
-                ).all()
-            }
-        self.region_id_mapper = mapper
-
-        return True
+        return self._get_id_mapper(RegionDict)
 
     def _process_df(self, df: pd.DataFrame) -> pd.DataFrame:
         """Overridden helper method to process the Country data export file
