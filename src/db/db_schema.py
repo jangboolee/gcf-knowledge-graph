@@ -146,7 +146,7 @@ class Readiness(Base):
     is_ldc: Mapped[bool] = mapped_column(Boolean, nullable=False)
     is_nap: Mapped[bool] = mapped_column(Boolean, nullable=False)
     status_id: Mapped[int] = mapped_column(
-        ForeignKey("readiness_status_dict.id"), nullable=False
+        ForeignKey("status_dict.id"), nullable=False
     )
     approved_date: Mapped[datetime] = mapped_column(nullable=False)
     financing_usd: Mapped[int] = mapped_column(nullable=False)
@@ -160,8 +160,8 @@ class Readiness(Base):
     activity_type: Mapped["ActivityTypeDict"] = relationship(
         "ActivityTypeDict", back_populates="readinesses"
     )
-    status: Mapped["ReadinessStatusDict"] = relationship(
-        "ReadinessStatusDict", back_populates="readinesses"
+    status: Mapped["StatusDict"] = relationship(
+        "StatusDict", back_populates="readinesses"
     )
 
 
@@ -275,8 +275,8 @@ class ActivityTypeDict(Base):
     )
 
 
-class ReadinessStatusDict(Base):
-    __tablename__ = "readiness_status_dict"
+class StatusDict(Base):
+    __tablename__ = "status_dict"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)

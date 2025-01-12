@@ -6,10 +6,10 @@ from src.importer.data_dict import (
     EssCategoryDictImporter,
     ModalityDictImporter,
     SizeDictImporter,
-    ReadinessStatusDictImporter,
     RegionDictImporter,
     SectorDictImporter,
     StageDictImporter,
+    StatusDictImporter,
     ThemeDictImporter,
 )
 from src.db.db_handler import DBHandler
@@ -24,11 +24,11 @@ def main():
         EntityTypeDictImporter(db_handler),
         EssCategoryDictImporter(db_handler),
         ModalityDictImporter(db_handler),
-        ReadinessStatusDictImporter(db_handler),
         RegionDictImporter(db_handler),
         SectorDictImporter(db_handler),
         SizeDictImporter(db_handler),
         StageDictImporter(db_handler),
+        StatusDictImporter(db_handler),
         ThemeDictImporter(db_handler),
     ]
 
@@ -39,11 +39,11 @@ def main():
         base_path / "entity_type_dict.csv",
         base_path / "ess_category_dict.csv",
         base_path / "modality_dict.csv",
-        base_path / "readiness_status_dict.csv",
         base_path / "region_dict.csv",
         base_path / "sector_dict.csv",
         base_path / "size_dict.csv",
         base_path / "stage_dict.csv",
+        base_path / "status_dict.csv",
         base_path / "theme_dict.csv",
     ]
 
