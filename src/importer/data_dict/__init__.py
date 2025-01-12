@@ -2,9 +2,9 @@ from .activity_type_dict_importer import ActivityTypeDictImporter
 from .entity_type_dict_importer import EntityTypeDictImporter
 from .ess_category_dict_importer import EssCategoryDictImporter
 from .modality_dict_importer import ModalityDictImporter
-from .project_size_dict_importer import ProjectSizeDictImporter
 from .readiness_status_dict_importer import ReadinessStatusDictImporter
 from .region_dict_importer import RegionDictImporter
 from .sector_dict_importer import SectorDictImporter
+from .size_dict_importer import SizeDictImporter
 from .stage_dict_importer import StageDictImporter
 from .theme_dict_importer import ThemeDictImporter
