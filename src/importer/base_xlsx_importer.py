@@ -22,7 +22,7 @@ class BaseXlsxImporter:
         ]
 
     def _get_id_mapper(self, table_class: Type[DeclarativeMeta]) -> bool:
-        """General helper to get a name to ID mapper for any given table class.
+        """General helper to get a name to ID mapper for any given table class
 
         Args:
             table_class (Type[DeclarativeMeta]): The SQLAlchemy ORM table class
@@ -43,6 +43,53 @@ class BaseXlsxImporter:
         setattr(self, f"{var_name}_id_mapper", mapper)
 
         return True
+
+    def _map_ids(
+        self,
+        df: pd.DataFrame,
+        name_col: str,
+        id_col: str,
+        mapper: dict[str, int],
+    ) -> bool:
+        """Helper to map the IDs from the names, and then drop the name column
+
+        Args:
+            df (pd.DataFrame): Dataframe to map IDs on
+            name_col (str): Name of the column with names to map from
+            id_col (str): Name of the ID column to map to
+            mapper (dict[str, int]): Mapper with name as key and id as value
+
+        Returns:
+            bool: True after completion
+        """
+
+        # Map the ID from the names, using the mapper
+        df[id_col] = df[name_col].map(mapper)
+        # Drop the redundant name column
+        df.drop(name_col, axis=1, inplace=True)
+
+        return True
+
+    def _move_col(
+        self, df: pd.DataFrame, col_name: str, insert_idx: int
+    ) -> bool:
+        """Helper to move a column to a desired location within a dataframe
+
+        Args:
+            df (pd.DataFrame): Dataframe to use for moving columns
+            col_name (str): Name of the column to move
+            insert_idx (int): Column index to insert the column into
+
+        Returns:
+            bool: True if successful, False if not
+        """
+
+        if col_name in df.columns:
+            move_series = df.pop(col_name)
+            df.insert(insert_idx, col_name, move_series)
+            return True
+
+        return False
 
     def _read_xlsx(self, file_path: str) -> pd.DataFrame:
         """Helper method to read in an XLSX data export file as a dataframe
