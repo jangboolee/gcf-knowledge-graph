@@ -12,6 +12,11 @@ class CountryExportImporter(BaseXlsxImporter):
         self.region_id_mapper = None
 
     def _get_region_id_mapper(self) -> bool:
+        """Helper getter to get the region name to ID mapper
+
+        Returns:
+            bool: True after completion
+        """
 
         # Create region name to ID mapping dictionary
         with self.db_handler.get_session() as session:
@@ -26,6 +31,14 @@ class CountryExportImporter(BaseXlsxImporter):
         return True
 
     def _process_df(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Overridden helper method to process the Country data export file
+
+        Args:
+            df (pd.DataFrame): Raw dataframe of the Country data export file
+
+        Returns:
+            pd.DataFrame: Processed dataframe of Country data
+        """
 
         # Drop the 4 calculated columns
         processed = df.iloc[:, :-4]
