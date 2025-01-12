@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, session
+from sqlalchemy.orm import sessionmaker, Session, configure_mappers
 
 from src.db.db_schema import Base
 
 
-class DbHandler:
+class DBHandler:
 
     def __init__(self, db_uri: str = "sqlite:///data/gcf_data.db") -> None:
 
@@ -15,6 +15,7 @@ class DbHandler:
     def create_all(self) -> bool:
 
         Base.metadata.create_all(self.engine)
+        configure_mappers()
         return True
 
     def drop_all(self) -> bool:
@@ -22,8 +23,11 @@ class DbHandler:
         Base.metadata.drop_all(self.engine)
         return True
 
+    def get_session(self) -> Session:
+        return self.Session()
+
 
 if __name__ == "__main__":
 
-    handler = DbHandler()
+    handler = DBHandler()
     handler.create_all()
