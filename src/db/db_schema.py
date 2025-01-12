@@ -28,7 +28,7 @@ class Project(Base):
         ForeignKey("theme_dict.id"), nullable=False
     )
     project_size_id: Mapped[int] = mapped_column(
-        ForeignKey("project_size_dict.id"), nullable=False
+        ForeignKey("project_size_dict.id"), nullable=True
     )
     ess_category_id: Mapped[int] = mapped_column(
         ForeignKey("ess_category_dict.id"), nullable=False
