@@ -187,7 +187,7 @@ class BaseXlsxImporter:
         database
 
         Args:
-            file_path (str): Path to the CSV file
+            file_path (str): Path to the XSLX file
 
         Returns:
             bool: True if successful, False if not
