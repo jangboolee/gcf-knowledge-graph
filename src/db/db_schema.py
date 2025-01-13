@@ -39,7 +39,7 @@ class Project(Base):
 
     # Data dictionary relationships
     countries: Mapped[list["CountryDict"]] = relationship(
-        "CountryDict", secondary="country_project", back_populates="projects"
+        "CountryDict", secondary="project_country", back_populates="projects"
     )
     modality: Mapped["ModalityDict"] = relationship(
         "ModalityDict", back_populates="projects"
@@ -157,7 +157,7 @@ class Readiness(Base):
     )
     countries: Mapped[list["CountryDict"]] = relationship(
         "CountryDict",
-        secondary="country_readiness",
+        secondary="readiness_country",
         back_populates="readinesses",
     )
     delivery_partner: Mapped["DeliveryPartnerDict"] = relationship(
@@ -199,11 +199,11 @@ class CountryDict(Base):
     )
     # Join table relationships
     projects: Mapped[list["Project"]] = relationship(
-        "Project", secondary="country_project", back_populates="countries"
+        "Project", secondary="project_country", back_populates="countries"
     )
     readinesses: Mapped[list["Readiness"]] = relationship(
         "Readiness",
-        secondary="country_readiness",
+        secondary="readiness_country",
         back_populates="countries",
     )
 
@@ -326,25 +326,25 @@ class DeliveryPartnerDict(Base):
 
 
 # Join tables
-class CountryProject(Base):
-    __tablename__ = "country_project"
+class ProjectCountry(Base):
+    __tablename__ = "project_country"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    country_id: Mapped[int] = mapped_column(
-        ForeignKey("country_dict.id"), nullable=False
-    )
     project_id: Mapped[int] = mapped_column(
         ForeignKey("project.id"), nullable=False
     )
-
-
-class CountryReadiness(Base):
-    __tablename__ = "country_readiness"
-
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     country_id: Mapped[int] = mapped_column(
         ForeignKey("country_dict.id"), nullable=False
     )
+
+
+class ReadinessCountry(Base):
+    __tablename__ = "readiness_country"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     readiness_id: Mapped[int] = mapped_column(
         ForeignKey("readiness.id"), nullable=False
+    )
+    country_id: Mapped[int] = mapped_column(
+        ForeignKey("country_dict.id"), nullable=False
     )
