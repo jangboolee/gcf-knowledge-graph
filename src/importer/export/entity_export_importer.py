@@ -32,7 +32,7 @@ class EntityExportImporter(BaseXlsxImporter):
 
         return all(
             [
-                self._get_id_mapper(CountryDict),
+                self._get_id_mapper(CountryDict, name_col="iso3"),
                 self._get_id_mapper(EntityTypeDict),
                 self._get_id_mapper(StageDict),
                 self._get_id_mapper(SizeDict),
@@ -54,18 +54,10 @@ class EntityExportImporter(BaseXlsxImporter):
         df = df.iloc[:, :-2]
         # Get all mappers for importing entity export file
         self._get_all_mappers()
-        # Reconcile country naming differences
-        self.country_id_mapper["United States"] = 236
-        self.country_id_mapper["Philippines (the)"] = 176
-        self.country_id_mapper["Cote d'Ivoire"] = 55
-        self.country_id_mapper["Venezuela (Bolivarian Republic of)"] = 176
-        self.country_id_mapper["Bolivia (Plurinational State of)"] = 241
-        self.country_id_mapper["United Kingdom"] = 235
-        self.country_id_mapper["Tanzania"] = 220
-        self.country_id_mapper["Netherlands (the)"] = 157
-        self.country_id_mapper["Micronesia (Federated States of)"] = 145
+        # Use country_converter to map ISO3 from country names and drop names
+        df["iso3"] = self.cc.pandas_convert(series=df["Country"], to="ISO3")
+        df.drop("Country", axis=1, inplace=True)
         # Trim leading whitespaces
-        self.country_id_mapper["Republic of Korea (the)"] = 176
         df["Size"] = df["Size"].str.lstrip()
         # Remove "B." string from BM columns while keeping NaN values
         df["BM"] = (
@@ -74,7 +66,7 @@ class EntityExportImporter(BaseXlsxImporter):
             .pipe(pd.to_numeric, errors="coerce")
         )
         # Map IDs from names
-        self._map_ids(df, "Country", "country_id", self.country_id_mapper)
+        self._map_ids(df, "iso3", "country_id", self.country_id_mapper)
         self._map_ids(df, "Type", "entity_type_id", self.entitytype_id_mapper)
         self._map_ids(df, "Stage", "stage_id", self.stage_id_mapper)
         self._map_ids(df, "Size", "size_id", self.size_id_mapper)
