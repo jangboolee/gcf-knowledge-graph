@@ -19,7 +19,9 @@ class Project(Base):
         ForeignKey("modality_dict.id"), nullable=False
     )
     name: Mapped[str] = mapped_column(nullable=False)
-    entity_id: Mapped[int] = mapped_column(ForeignKey("entity.id"))
+    entity_id: Mapped[int] = mapped_column(
+        ForeignKey("entity.id"), nullable=True
+    )
     bm: Mapped[int] = mapped_column(nullable=False)
     sector_id: Mapped[int] = mapped_column(
         ForeignKey("sector_dict.id"), nullable=False
@@ -35,6 +37,7 @@ class Project(Base):
     )
     financing_usd: Mapped[int] = mapped_column(nullable=False)
 
+    # Data dictionary relationships
     entities: Mapped[list["Entity"]] = relationship(
         "Entity", back_populates="projects"
     )
@@ -82,6 +85,7 @@ class Entity(Base):
         ForeignKey("sector_dict.id"), nullable=False
     )
 
+    # Data dictionary relationships
     projects: Mapped[list["Project"]] = relationship(
         "Project", secondary="entity_project", back_populates="entities"
     )
@@ -114,6 +118,7 @@ class Country(Base):
     is_sids: Mapped[bool] = mapped_column(Boolean)
     is_ldc: Mapped[bool] = mapped_column(Boolean)
 
+    # Data dictionary relationships
     region: Mapped["RegionDict"] = relationship(
         "RegionDict", back_populates="countries"
     )
@@ -147,6 +152,7 @@ class Readiness(Base):
     approved_date: Mapped[datetime] = mapped_column(nullable=False)
     financing_usd: Mapped[int] = mapped_column(nullable=False)
 
+    # Data dictionary relationships
     country: Mapped["CountryDict"] = relationship(
         "CountryDict", back_populates="readinesses"
     )
