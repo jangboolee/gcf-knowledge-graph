@@ -11,6 +11,8 @@ class DBHandler:
         self.db_uri = db_uri
         self.engine = create_engine(self.db_uri, echo=True)
         self.Session = sessionmaker(bind=self.engine)
+        # Ensure all tables exist when DB Handler is instantiated
+        self.create_all()
 
     def create_all(self) -> bool:
 
