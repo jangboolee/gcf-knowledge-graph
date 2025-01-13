@@ -3,7 +3,7 @@ Knowledge Graph representation of United Nations Global Climate Fund project/pro
 
 ## Tabular DB schema
 
-![GCF_schema](https://github.com/user-attachments/assets/1fd4e56f-af93-4fb2-a9c0-3a6e65b0e35d)
+![GCF_schema](https://github.com/user-attachments/assets/40098904-e729-4970-ac67-8655cdce5b71)
 
 ## Manual data inconsistency reconciliation
 
@@ -23,7 +23,7 @@ Row 49 of the entity export seemed to contain a data inconsistency, where it is 
 | \# Approved  | 2                                                                                                |
 | FA Financing | 52706595                                                                                         |
 
- Although the `Size` column seems to refer to the sizes of the projects carried out by the entity, referring to the project export, we see that the `DOE_ATG` entity has 2 projects in rows 53 and 120, both with the size `Small`:
+ Since it is unreasonable to assume that a single entity will have multiple sizes, it is more reasonable to assume that the `Size` column refers to the sizes of the projects carried out by the entity. However, when referring to the project export file, we see that the `DOE_ATG` entity has 2 projects in rows 53 and 120, both with the size `Small`, which is inconsistent with the values of the `Size` column in row 49 of the entity export:
 
 ![image](https://github.com/user-attachments/assets/441180e0-e315-46e2-ad0a-b4b679f57391)
 
