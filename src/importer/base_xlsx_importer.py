@@ -21,20 +21,29 @@ class BaseXlsxImporter:
             if col.name != "id"
         ]
 
-    def _get_id_mapper(self, table_class: Type[DeclarativeMeta]) -> bool:
+    def _get_id_mapper(
+        self,
+        table_class: Type[DeclarativeMeta],
+        name_col: str = "name",
+        id_col: str = "id",
+    ) -> bool:
         """General helper to get a name to ID mapper for any given table class
 
         Args:
             table_class (Type[DeclarativeMeta]): The SQLAlchemy ORM table class
+            name_col (str, optional): Column name of the name column.
+                Defaults to "name".
+            id_col (str, optional): Column name of the ID column.
+                Defaults to "id".
 
         Returns:
-            bool: True after completion.
+            bool: True after completion
         """
 
         # Create name to ID mapping dictionary
         with self.db_handler.get_session() as session:
             mapper = {
-                getattr(item, "name"): getattr(item, "id")
+                getattr(item, name_col): getattr(item, id_col)
                 for item in session.query(table_class).all()
             }
 
@@ -43,6 +52,9 @@ class BaseXlsxImporter:
         setattr(self, f"{var_name}_id_mapper", mapper)
 
         return True
+
+    def _get_all_mappers(self) -> bool:
+        raise NotImplementedError
 
     def _map_ids(
         self,

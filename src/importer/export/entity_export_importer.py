@@ -22,49 +22,23 @@ class EntityExportImporter(BaseXlsxImporter):
         self.size_id_mapper = None
         self.sector_id_mapper = None
 
-    def _get_country_id_mapper(self) -> bool:
-        """Helper getter to get the region name to ID mapper
+    def _get_all_mappers(self) -> bool:
+        """Overriden helper method to get all required mappers for importing
+        the Entity export file
 
         Returns:
-            bool: True after completion
-        """
-        return self._get_id_mapper(CountryDict)
-
-    def _get_entity_type_id_mapper(self) -> bool:
-        """Helper getter to get the entity type name to ID mapper
-
-        Returns:
-            bool: True after completion
+            bool: True if all getters are successful, False if not
         """
 
-        return self._get_id_mapper(EntityTypeDict)
-
-    def _get_stage_id_mapper(self) -> bool:
-        """Helper getter to get the stage name to ID mapper
-
-        Returns:
-            bool: True after completion
-        """
-
-        return self._get_id_mapper(StageDict)
-
-    def _get_size_id_mapper(self) -> bool:
-        """Helper getter to get the size name to ID mapper
-
-        Returns:
-            bool: True after completion
-        """
-
-        return self._get_id_mapper(SizeDict)
-
-    def _get_sector_id_mapper(self) -> bool:
-        """Helper getter to get the sector name to ID mapper
-
-        Returns:
-            bool: True after completion
-        """
-
-        return self._get_id_mapper(SectorDict)
+        return all(
+            [
+                self._get_id_mapper(CountryDict),
+                self._get_id_mapper(EntityTypeDict),
+                self._get_id_mapper(StageDict),
+                self._get_id_mapper(SizeDict),
+                self._get_id_mapper(SectorDict),
+            ]
+        )
 
     def _process_df(self, df: pd.DataFrame) -> pd.DataFrame:
         """Overridden helper method to process the Entity data export file
@@ -78,12 +52,8 @@ class EntityExportImporter(BaseXlsxImporter):
 
         # Drop the 2 calculated columns
         df = df.iloc[:, :-2]
-        # Get mapper to map region ID from region name
-        self._get_country_id_mapper()
-        self._get_entity_type_id_mapper()
-        self._get_stage_id_mapper()
-        self._get_sector_id_mapper()
-        self._get_size_id_mapper()
+        # Get all mappers for importing entity export file
+        self._get_all_mappers()
         # Reconcile country naming differences
         self.country_id_mapper["United States"] = 236
         self.country_id_mapper["Philippines (the)"] = 176
