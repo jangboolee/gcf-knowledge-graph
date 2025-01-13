@@ -1,5 +1,6 @@
 from .activity_type_dict_importer import ActivityTypeDictImporter
 from .country_dict_importer import CountryDictImporter
+from .delivery_partner_dict_importer import DeliveryPartnerDictImporter
 from .entity_type_dict_importer import EntityTypeDictImporter
 from .ess_category_dict_importer import EssCategoryDictImporter
 from .modality_dict_importer import ModalityDictImporter
