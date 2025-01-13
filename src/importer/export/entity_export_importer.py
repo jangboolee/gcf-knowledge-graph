@@ -49,6 +49,11 @@ class EntityExportImporter(BaseXlsxImporter):
         return self._get_id_mapper(StageDict)
 
     def _get_size_id_mapper(self) -> bool:
+        """Helper getter to get the size name to ID mapper
+
+        Returns:
+            bool: True after completion
+        """
 
         return self._get_id_mapper(SizeDict)
 
