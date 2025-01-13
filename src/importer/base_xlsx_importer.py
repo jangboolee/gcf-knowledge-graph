@@ -61,7 +61,7 @@ class BaseXlsxImporter:
                 base class
 
         Returns:
-            bool: True if all getters are retrieved, False if not
+            bool: True if all getters are successful, False if not
         """
 
         raise NotImplementedError
