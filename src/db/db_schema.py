@@ -133,15 +133,12 @@ class Readiness(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     ref: Mapped[str] = mapped_column(nullable=False)
     activity_type_id: Mapped[int] = mapped_column(
-        ForeignKey("activity_type_dict.id"), nullable=False
+        ForeignKey("activity_type_dict.id"), nullable=True
     )
     name: Mapped[str] = mapped_column(nullable=False)
-    country_id: Mapped[int] = mapped_column(
-        ForeignKey("country_dict.id"), nullable=False
-    )
     delivery_partner: Mapped[str] = mapped_column(nullable=False)
     region_id: Mapped[int] = mapped_column(
-        ForeignKey("region_dict.id"), nullable=False
+        ForeignKey("region_dict.id"), nullable=True
     )
     is_sids: Mapped[bool] = mapped_column(Boolean, nullable=False)
     is_ldc: Mapped[bool] = mapped_column(Boolean, nullable=False)
@@ -153,9 +150,6 @@ class Readiness(Base):
     financing_usd: Mapped[int] = mapped_column(nullable=False)
 
     # Data dictionary relationships
-    country: Mapped["CountryDict"] = relationship(
-        "CountryDict", back_populates="readinesses"
-    )
     region: Mapped["RegionDict"] = relationship(
         "RegionDict", back_populates="readinesses"
     )
@@ -164,6 +158,11 @@ class Readiness(Base):
     )
     status: Mapped["StatusDict"] = relationship(
         "StatusDict", back_populates="readinesses"
+    )
+    countries: Mapped[list["CountryDict"]] = relationship(
+        "CountryDict",
+        secondary="country_readiness",
+        back_populates="readinesses",
     )
 
 
@@ -196,15 +195,17 @@ class CountryDict(Base):
     entities: Mapped[list["Entity"]] = relationship(
         "Entity", back_populates="country"
     )
-    readinesses: Mapped[list["Readiness"]] = relationship(
-        "Readiness", back_populates="country"
-    )
     country: Mapped["Country"] = relationship(
         "Country", back_populates="dictionary", uselist=False
     )
     # Join table relationships
     projects: Mapped[list["Project"]] = relationship(
         "Project", secondary="country_project", back_populates="countries"
+    )
+    readinesses: Mapped[list["Readiness"]] = relationship(
+        "Readiness",
+        secondary="country_readiness",
+        back_populates="countries",
     )
 
 
@@ -317,7 +318,7 @@ class StatusDict(Base):
 class CountryProject(Base):
     __tablename__ = "country_project"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     country_id: Mapped[int] = mapped_column(
         ForeignKey("country_dict.id"), nullable=False
     )
@@ -329,10 +330,22 @@ class CountryProject(Base):
 class EntityProject(Base):
     __tablename__ = "entity_project"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     entity_id: Mapped[int] = mapped_column(
         ForeignKey("entity.id"), nullable=False
     )
     project_id: Mapped[int] = mapped_column(
         ForeignKey("project.id"), nullable=False
+    )
+
+
+class CountryReadiness(Base):
+    __tablename__ = "country_readiness"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    country_id: Mapped[int] = mapped_column(
+        ForeignKey("country_dict.id"), nullable=False
+    )
+    readiness_id: Mapped[int] = mapped_column(
+        ForeignKey("readiness.id"), nullable=False
     )
