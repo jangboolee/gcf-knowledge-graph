@@ -1,9 +1,10 @@
 import logging
+from typing import Type
 
 import pandas as pd
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import DeclarativeMeta
-from typing import Type
+import country_converter as coco
 
 from src.db.db_handler import DBHandler
 
@@ -20,6 +21,7 @@ class BaseXlsxImporter:
             for col in self.table_class.__table__.columns
             if col.name != "id"
         ]
+        self.cc = coco.CountryConverter()
 
     def _get_id_mapper(
         self,
