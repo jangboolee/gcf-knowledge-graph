@@ -67,7 +67,11 @@ class BaseCountryParser:
 
         try:
             df = pd.read_excel(file_path)
+            # Re-create ID column for input
             df["id"] = range(1, len(df) + 1)
+            # Filter out rows without countries
+            df = df[~pd.isna(df[self.country_col])].copy()
+            # Keep only ID and country columns
             self.input = df[["id", self.country_col]]
             return True
         except Exception as e:
@@ -102,7 +106,7 @@ class BaseCountryParser:
         df = self.parsed
 
         # Map ISO3 from country names using country converter
-        df["iso3"] = self.cc.pandas_convert(df["Countries"])
+        df["iso3"] = self.cc.pandas_convert(df[self.country_col])
         # Map country ID from ISO3 using custom mapper
         df["country_id"] = df["iso3"].map(self.country_id_mapper)
         # Drop redundant columns
@@ -140,7 +144,7 @@ class BaseCountryParser:
 
         return False
 
-    def parse_country(self, file_path: str) -> bool:
+    def parse_countries(self, file_path: str) -> bool:
         """High-level main method to parse out multiple country values in a
         single cell to multiple rows
 
