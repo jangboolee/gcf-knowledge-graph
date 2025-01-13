@@ -131,7 +131,7 @@ class Readiness(Base):
     __tablename__ = "readiness"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    ref: Mapped[str] = mapped_column(nullable=False)
+    ref: Mapped[str] = mapped_column(nullable=True)
     activity_type_id: Mapped[int] = mapped_column(
         ForeignKey("activity_type_dict.id"), nullable=True
     )
