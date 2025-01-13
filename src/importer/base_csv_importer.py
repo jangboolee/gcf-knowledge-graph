@@ -30,7 +30,7 @@ class BaseCsvImporter:
         """
 
         try:
-            return pd.read_csv(file_path)
+            return pd.read_csv(file_path, keep_default_na=False)
         except Exception as e:
             raise ValueError(f"Error reading CSV file at {file_path}: {e}")
 
@@ -47,6 +47,12 @@ class BaseCsvImporter:
         with self.db_handler.get_session() as session:
             try:
                 records = df.to_dict(orient="records")
+
+                # Prevent "NA" ISO2 as getting parsed as NULL
+                if "iso2" in df.columns:
+                    for record in records:
+                        record["iso2"] = str(record["iso2"])
+
                 session.bulk_insert_mappings(self.table_class, records)
                 session.commit()
                 print(
