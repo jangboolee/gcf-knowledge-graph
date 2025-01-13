@@ -38,9 +38,6 @@ class Project(Base):
     financing_usd: Mapped[int] = mapped_column(nullable=False)
 
     # Data dictionary relationships
-    entities: Mapped[list["Entity"]] = relationship(
-        "Entity", back_populates="projects"
-    )
     countries: Mapped[list["CountryDict"]] = relationship(
         "CountryDict", secondary="country_project", back_populates="projects"
     )
@@ -86,9 +83,6 @@ class Entity(Base):
     )
 
     # Data dictionary relationships
-    projects: Mapped[list["Project"]] = relationship(
-        "Project", secondary="entity_project", back_populates="entities"
-    )
     country: Mapped["CountryDict"] = relationship(
         "CountryDict", back_populates="entities"
     )
@@ -136,7 +130,9 @@ class Readiness(Base):
         ForeignKey("activity_type_dict.id"), nullable=True
     )
     name: Mapped[str] = mapped_column(nullable=False)
-    delivery_partner: Mapped[str] = mapped_column(nullable=False)
+    delivery_partner_id: Mapped[int] = mapped_column(
+        ForeignKey("delivery_partner_dict.id"), nullable=False
+    )
     region_id: Mapped[int] = mapped_column(
         ForeignKey("region_dict.id"), nullable=True
     )
@@ -163,6 +159,9 @@ class Readiness(Base):
         "CountryDict",
         secondary="country_readiness",
         back_populates="readinesses",
+    )
+    delivery_partner: Mapped["DeliveryPartnerDict"] = relationship(
+        "DeliveryPartnerDict", back_populates="readinesses"
     )
 
 
@@ -314,6 +313,18 @@ class StatusDict(Base):
     )
 
 
+class DeliveryPartnerDict(Base):
+    __tablename__ = "delivery_partner_dict"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+
+    # Relationships
+    readinesses: Mapped[list["Readiness"]] = relationship(
+        "Readiness", back_populates="delivery_partner"
+    )
+
+
 # Join tables
 class CountryProject(Base):
     __tablename__ = "country_project"
@@ -321,18 +332,6 @@ class CountryProject(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     country_id: Mapped[int] = mapped_column(
         ForeignKey("country_dict.id"), nullable=False
-    )
-    project_id: Mapped[int] = mapped_column(
-        ForeignKey("project.id"), nullable=False
-    )
-
-
-class EntityProject(Base):
-    __tablename__ = "entity_project"
-
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    entity_id: Mapped[int] = mapped_column(
-        ForeignKey("entity.id"), nullable=False
     )
     project_id: Mapped[int] = mapped_column(
         ForeignKey("project.id"), nullable=False
