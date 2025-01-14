@@ -15,10 +15,10 @@ class Connection:
 
     def __init__(self) -> None:
 
-        self.kg_db_uri = Path(".") / "data" / "gcf_data.db"
+        self.db_uri = Path(".") / "data" / "gcf_data.db"
 
         # Environment variables for graph connection
-        self.uri = os.environ.get("URI")
+        self.kg_uri = os.environ.get("URI")
         self.user = os.environ.get("USERNAME")
         self.password = os.environ.get("PASSWORD")
 
