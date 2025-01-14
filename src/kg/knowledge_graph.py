@@ -73,6 +73,11 @@ class KnowledgeGraph:
         return all([self._close_session(), self.conn.close()])
 
     def initialize(self) -> bool:
+        """Main method to initialize the GCF Knowledge Graph with all nodes
+
+        Returns:
+            bool: True after completion
+        """
 
         # Initialize node services for populating nodes
         services = [
@@ -93,6 +98,8 @@ class KnowledgeGraph:
         # Initialize and populate each service
         for service in services:
             service.populate()
+
+        return True
 
 
 if __name__ == "__main__":
