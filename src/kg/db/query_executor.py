@@ -11,10 +11,16 @@ from neo4j.exceptions import (
 from pandas import DataFrame
 from tqdm import tqdm
 
+from src.utils.singleton import Singleton
 
-class QueryExecutor:
+
+class QueryExecutor(Singleton):
 
     def __init__(self, session: Session) -> None:
+
+        # Avoid reinitializing in singleton
+        if not hasattr(self, "initialized"):
+            self.initialized = True
         self.session = session
 
     @staticmethod

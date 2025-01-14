@@ -2,12 +2,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session, configure_mappers
 
 from src.db.db_schema import Base
+from src.utils.singleton import Singleton
 
 
-class DBHandler:
+class DBHandler(Singleton):
 
     def __init__(self, db_uri: str = "sqlite:///data/gcf_data.db") -> None:
 
+        # Avoid reinitializing in singleton
+        if not hasattr(self, "initialized"):
+            self.initialized = True
         self.db_uri = db_uri
         self.engine = create_engine(self.db_uri, echo=True)
         self.Session = sessionmaker(bind=self.engine)
