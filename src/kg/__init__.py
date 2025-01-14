@@ -1,4 +1,5 @@
 from src.kg.services.meta.activity_type_node_service import ActivityTypeService
+from src.kg.services.meta.bm_node_service import BmNodeService
 from src.kg.services.meta.country_node_service import CountryService
 from src.kg.services.meta.delivery_partner_node_service import (
     DeliveryPartnerService,
@@ -12,3 +13,4 @@ from src.kg.services.meta.size_node_service import SizeService
 from src.kg.services.meta.stage_node_service import StageService
 from src.kg.services.meta.status_node_service import StatusService
 from src.kg.services.meta.theme_node_service import ThemeService
+from src.kg.services.data.project_service import ProjectService

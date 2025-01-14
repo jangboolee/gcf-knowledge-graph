@@ -120,7 +120,7 @@ if __name__ == "__main__":
     conn.connect()
 
     kg = KnowledgeGraph(conn=conn)
-    kg.initialize()
-    # kg.populate()
+    # kg.initialize()
+    kg.populate()
 
     kg.close()
