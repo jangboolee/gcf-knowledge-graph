@@ -22,7 +22,10 @@ class Project(Base):
     entity_id: Mapped[int] = mapped_column(
         ForeignKey("entity.id"), nullable=True
     )
-    bm: Mapped[int] = mapped_column(nullable=False)
+    bm_id: Mapped[int] = mapped_column(
+        ForeignKey("bm_dict.id"), nullable=False
+    )
+
     sector_id: Mapped[int] = mapped_column(
         ForeignKey("sector_dict.id"), nullable=False
     )
@@ -56,6 +59,7 @@ class Project(Base):
     ess_category: Mapped["EssCategoryDict"] = relationship(
         "EssCategoryDict", back_populates="projects"
     )
+    bm: Mapped["BmDict"] = relationship("BmDict", back_populates="projects")
 
 
 class Entity(Base):
@@ -74,7 +78,7 @@ class Entity(Base):
     stage_id: Mapped[int] = mapped_column(
         ForeignKey("stage_dict.id"), nullable=False
     )
-    bm: Mapped[int] = mapped_column(nullable=True)
+    bm_id: Mapped[int] = mapped_column(ForeignKey("bm_dict.id"), nullable=True)
     size_id: Mapped[int] = mapped_column(
         ForeignKey("size_dict.id"), nullable=False
     )
@@ -98,6 +102,7 @@ class Entity(Base):
     sector: Mapped["SectorDict"] = relationship(
         "SectorDict", back_populates="entities"
     )
+    bm: Mapped["BmDict"] = relationship("BmDict", back_populates="entities")
 
 
 class Country(Base):
@@ -322,6 +327,21 @@ class DeliveryPartnerDict(Base):
     # Relationships
     readinesses: Mapped[list["Readiness"]] = relationship(
         "Readiness", back_populates="delivery_partner"
+    )
+
+
+class BmDict(Base):
+    __tablename__ = "bm_dict"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+
+    # Relationships
+    projects: Mapped[list["Project"]] = relationship(
+        "Project", back_populates="bm"
+    )
+    entities: Mapped[list["Entity"]] = relationship(
+        "Entity", back_populates="bm"
     )
 
 
