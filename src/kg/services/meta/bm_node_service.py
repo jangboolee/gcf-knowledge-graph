@@ -9,4 +9,4 @@ class BmNodeService(MetaService):
     def __init__(self, session: Session) -> None:
 
         super().__init__(session, BmDict)
-        self.node_label = "BM"
+        self.node_label = "Bm"
