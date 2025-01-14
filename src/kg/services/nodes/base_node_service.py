@@ -12,12 +12,11 @@ class NodeService:
 
     def __init__(
         self,
-        db_handler: DBHandler,
         session: Session,
         table_class: Type[DeclarativeMeta],
     ) -> None:
 
-        self.db_handler = db_handler
+        self.db_handler = DBHandler()
         self.query_executor = QueryExecutor(session)
         self.session = session
         self.table_class = table_class
