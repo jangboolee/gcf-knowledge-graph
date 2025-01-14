@@ -2,7 +2,7 @@ import logging
 
 from src.kg.db.connection import Connection
 from src.kg.db.query_executor import QueryExecutor
-from src.kg import RegionService
+from src.kg import RegionService, ActivityTypeService
 
 
 class KnowledgeGraph:
@@ -61,7 +61,12 @@ class KnowledgeGraph:
 
     def initialize(self) -> bool:
 
+        # Initialize node services for populating nodes
+        activity_type_service = ActivityTypeService(self.session)
         region_service = RegionService(self.session)
+
+        # Populate graph with nodes
+        activity_type_service.populate()
         region_service.populate()
 
 
