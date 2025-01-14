@@ -1,4 +1,4 @@
-from src.kg.services.nodes.base_node_service import NodeService
+from src.kg.services.base_node_service import NodeService
 from src.db.db_schema import EntityTypeDict
 
 from neo4j import Session

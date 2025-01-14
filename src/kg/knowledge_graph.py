@@ -5,8 +5,11 @@ from src.kg.db.query_executor import QueryExecutor
 from src.kg import (
     ActivityTypeService,
     CountryService,
-    RegionService,
     DeliveryPartnerService,
+    EntityTypeService,
+    EssCategoryService,
+    ModalityService,
+    RegionService,
 )
 
 
@@ -67,16 +70,19 @@ class KnowledgeGraph:
     def initialize(self) -> bool:
 
         # Initialize node services for populating nodes
-        activity_type_service = ActivityTypeService(self.session)
-        region_service = RegionService(self.session)
-        country_service = CountryService(self.session)
-        dp_service = DeliveryPartnerService(self.session)
+        services = [
+            ActivityTypeService(self.session),
+            RegionService(self.session),
+            CountryService(self.session),
+            DeliveryPartnerService(self.session),
+            EntityTypeService(self.session),
+            EssCategoryService(self.session),
+            ModalityService(self.session),
+        ]
 
-        # Populate graph with nodes
-        activity_type_service.populate()
-        region_service.populate()
-        country_service.populate()
-        dp_service.populate()
+        # Initialize and populate each service
+        for service in services:
+            service.populate()
 
 
 if __name__ == "__main__":
