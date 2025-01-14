@@ -8,7 +8,7 @@ Knowledge Graph representation of United Nations Global Climate Fund project/pro
 
 ## Graph data model
 
-![GCF graph data model](https://github.com/user-attachments/assets/988f1654-cb8e-40d1-aa13-7b94d020df78)
+![GCF graph data model](https://github.com/user-attachments/assets/c66c9470-c9eb-4dc5-8748-dfa6c1ff9b85)
 
 ## Manual data inconsistency reconciliation
 
