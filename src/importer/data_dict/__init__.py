@@ -1,4 +1,5 @@
 from .activity_type_dict_importer import ActivityTypeDictImporter
+from .bm_dict_importer import BmDictImporter
 from .country_dict_importer import CountryDictImporter
 from .delivery_partner_dict_importer import DeliveryPartnerDictImporter
 from .entity_type_dict_importer import EntityTypeDictImporter

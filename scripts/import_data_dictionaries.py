@@ -2,6 +2,7 @@ from pathlib import Path
 
 from src.importer.data_dict import (
     ActivityTypeDictImporter,
+    BmDictImporter,
     CountryDictImporter,
     DeliveryPartnerDictImporter,
     EntityTypeDictImporter,
@@ -23,6 +24,7 @@ def main():
     db_handler = DBHandler()
     importers = [
         ActivityTypeDictImporter(db_handler),
+        BmDictImporter(db_handler),
         CountryDictImporter(db_handler),
         DeliveryPartnerDictImporter(db_handler),
         EntityTypeDictImporter(db_handler),
@@ -40,6 +42,7 @@ def main():
     base_path = Path(".") / "data" / "dictionary"
     file_paths = [
         base_path / "activity_type_dict.csv",
+        base_path / "bm_dict.csv",
         base_path / "country_dict.csv",
         base_path / "delivery_partner_dict.csv",
         base_path / "entity_type_dict.csv",
