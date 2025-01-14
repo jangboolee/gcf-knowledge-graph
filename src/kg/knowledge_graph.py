@@ -59,6 +59,32 @@ class KnowledgeGraph:
             "entity": EntityService(self.session),
             "country": CountryDataService(self.session),
         }
+        # Ensure proper constraints exist for each node type at initialization
+        self._ensure_constraints()
+
+    def _ensure_constraints(self) -> bool:
+        """Helper method to dynamically add constraints to the knowledge graph
+
+        Returns:
+            bool: True after completion
+        """
+
+        # Gather all services
+        all_services = {**self.meta_services, **self.data_services}
+
+        # Iterate through services and generate constraints
+        for service_name, service in all_services.items():
+            # Get the node label from the service
+            node_label = getattr(service, "node_label", None)
+            # Dynamically create a unique constraint for the id property
+            constraint_query = f"""
+            CREATE CONSTRAINT {node_label.lower()}_id_unique IF NOT EXISTS
+            FOR (n:{node_label}) REQUIRE n.id IS UNIQUE
+            """
+            # Execute the constraint query
+            self.session.execute_write(lambda tx: tx.run(constraint_query))
+
+        return True
 
     def _open_session(self) -> bool:
         """Helper method to open a session using the Connection class
