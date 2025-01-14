@@ -1,5 +1,6 @@
 import logging
 
+from src.db.db_handler import DBHandler
 from src.kg.db.connection import Connection
 from src.kg.db.query_executor import QueryExecutor
 from src.kg import (
@@ -22,13 +23,30 @@ class KnowledgeGraph:
 
     def __init__(self, conn: Connection) -> None:
 
+        # Instantiate singleton DB Handler to read from tabular DB
+        self.db_handler = DBHandler()
         # Connect to the database and open an active session
         self.database = "neo4j"
         self.conn = conn
         self.session = None
         self._open_session()
-        # Instantiate query executor interface
+        # Instantiate singleton query executor interface
         self.query_executor = QueryExecutor(self.session)
+        # Service classes for each node type
+        self.services = {
+            "activity_type": ActivityTypeService(self.session),
+            "country": CountryService(self.session),
+            "delivery_partner": DeliveryPartnerService(self.session),
+            "entity_type": EntityTypeService(self.session),
+            "ess_category": EssCategoryService(self.session),
+            "modality": ModalityService(self.session),
+            "region": RegionService(self.session),
+            "sector": SectorService(self.session),
+            "size": SizeService(self.session),
+            "stage": StageService(self.session),
+            "status": StatusService(self.session),
+            "theme": ThemeService(self.session),
+        }
 
     def _open_session(self) -> bool:
         """Helper method to open a session using the Connection class
@@ -79,24 +97,8 @@ class KnowledgeGraph:
             bool: True after completion
         """
 
-        # Initialize node services for populating nodes
-        services = [
-            ActivityTypeService(self.session),
-            CountryService(self.session),
-            DeliveryPartnerService(self.session),
-            EntityTypeService(self.session),
-            EssCategoryService(self.session),
-            ModalityService(self.session),
-            RegionService(self.session),
-            SectorService(self.session),
-            SizeService(self.session),
-            StageService(self.session),
-            StatusService(self.session),
-            ThemeService(self.session),
-        ]
-
         # Initialize and populate each service
-        for service in services:
+        for service in self.services.values():
             service.populate()
 
         return True
