@@ -1,14 +1,14 @@
 from neo4j import Session
 
 from src.kg.services.base_data_service import DataService
-from src.db.db_schema import Readiness
+from src.db.db_schema import Readiness, ReadinessCountry
 
 
 class ReadinessService(DataService):
 
     def __init__(self, session: Session) -> None:
 
-        super().__init__(session, Readiness)
+        super().__init__(session, Readiness, ReadinessCountry)
         self.node_label = "Readiness"
         self.properties = [
             "id",
@@ -39,7 +39,7 @@ class ReadinessService(DataService):
             "regionId": {
                 "label": "Region",
                 "direction": "OUT",
-                "relation": "HAS",
+                "relation": "IS_IN",
             },
         }
         # Configuration for the service node
