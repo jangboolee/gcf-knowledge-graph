@@ -49,7 +49,7 @@ class CountryService(MetaService):
         # Assume countries not found in country export file are not SIDS or LDC
         cols = ["is_sids", "is_ldc"]
         for col in cols:
-            df[col] = df[col].fillna(False).astype(bool)
+            df[col] = df[col].astype(bool).fillna(False)
 
         # Rename dataframe columns to align with property key camelcasing
         df.columns = [
