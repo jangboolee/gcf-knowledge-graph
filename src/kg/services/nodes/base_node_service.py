@@ -39,9 +39,7 @@ class NodeService:
             data = session.query(*self.table_class.__table__.columns).all()
             columns = [col.name for col in self.table_class.__table__.columns]
 
-        df = DataFrame(data, columns=columns)
-
-        self.raw_df = df
+        self.raw_df = DataFrame(data, columns=columns)
 
         return True
 
@@ -81,10 +79,10 @@ class NodeService:
 
         # Create Cypher query to populate the knowledge graph with the node
         query = f"""
-        UNWIND $data as datapoint
-        MERGE (node: {self.node_label} {{id: datapoint.id}})
+        UNWIND $data as record
+        MERGE (node: {self.node_label} {{id: record.id}})
         ON CREATE SET
-            node += datapoint
+            node += record
         """
 
         print(
