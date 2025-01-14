@@ -34,7 +34,7 @@ class Connection:
 
         try:
             self.driver = GraphDatabase.driver(
-                self.uri, auth=(self.user, self.password)
+                self.kg_uri, auth=(self.user, self.password)
             )
             logging.info("Connected to graph DB.")
             return True
