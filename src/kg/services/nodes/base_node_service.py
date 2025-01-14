@@ -88,4 +88,9 @@ class NodeService:
             node += datapoint
         """
 
+        print(
+            f"Populating graph with {len(self.processed)} "
+            f"{self.node_label} nodes..."
+        )
+
         return self.query_executor.execute_write(query, self.processed)
