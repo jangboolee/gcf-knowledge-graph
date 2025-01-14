@@ -11,14 +11,12 @@ from src.kg.db.query_executor import QueryExecutor
 class NodeService:
 
     def __init__(
-        self,
-        session: Session,
-        table_class: Type[DeclarativeMeta],
+        self, session: Session, table_class: Type[DeclarativeMeta]
     ) -> None:
 
+        self.session = session
         self.db_handler = DBHandler()
         self.query_executor = QueryExecutor(session)
-        self.session = session
         self.table_class = table_class
         # Instance variables to store node metadata
         self.node_label = None
