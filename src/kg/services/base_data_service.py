@@ -12,13 +12,17 @@ from src.kg.db.query_executor import QueryExecutor
 class DataService:
 
     def __init__(
-        self, session: Session, table_class: Type[DeclarativeMeta]
+        self,
+        session: Session,
+        table_class: Type[DeclarativeMeta],
+        join_class: Type[DeclarativeMeta] = None,
     ) -> None:
 
         self.session = session
         self.db_handler = DBHandler()
         self.query_executor = QueryExecutor(session)
         self.table_class = table_class
+        self.join_class = join_class
         # Instance variables to store node metadata
         self.node_label = None
         self.custom_keys = None
@@ -27,7 +31,9 @@ class DataService:
         self.config = None
         # Instance variables to store data
         self.raw_df = None
+        self.join_df = None
         self.processed = None
+        self.join_processed = None
 
     @staticmethod
     def _snake_to_camel(snake_str: str) -> str:
@@ -44,43 +50,65 @@ class DataService:
         parts = snake_str.split("_")
         return parts[0] + "".join(part.capitalize() for part in parts[1:])
 
-    def _get_data(self) -> bool:
+    def _get_data(self, for_join: bool = False) -> bool:
         """Helper method to retrieve the contents of the tabular DB table
         as a Pandas dataframe
+
+        Args:
+            for_join (bool, optional): Toggle to read optional join class.
+                Defaults to False.
 
         Returns:
             bool: True after completion
         """
 
         with self.db_handler.get_session() as session:
-            data = session.query(*self.table_class.__table__.columns).all()
-            cols = [col.name for col in self.table_class.__table__.columns]
+
+            if for_join:
+                data = session.query(*self.join_class.__table__.columns).all()
+                cols = [col.name for col in self.join_class.__table__.columns]
+            else:
+                data = session.query(*self.table_class.__table__.columns).all()
+                cols = [col.name for col in self.table_class.__table__.columns]
             camel_cols = [self._snake_to_camel(col) for col in cols]
 
-        self.raw_df = DataFrame(data, columns=camel_cols)
+        if for_join:
+            self.join_df = DataFrame(data, columns=camel_cols)
+        else:
+            self.raw_df = DataFrame(data, columns=camel_cols)
 
         return True
 
-    def _process_data(self) -> bool:
+    def _process_data(self, for_join: bool = False) -> bool:
         """Helper to process the raw DataFrame into a list of dictionaries
 
         Returns:
             bool: True if successful
         """
 
+        if for_join:
+            df = self.join_df
+        else:
+            df = self.raw_df
+
         # If custom keys are provided for the node
         if self.custom_keys:
             # Check if the custom keys are valid
-            if len(self.custom_keys) != len(self.raw_df.columns):
+            if len(self.custom_keys) != len(df.columns):
                 raise ValueError("Length of custom_keys do not match.")
             # Create a list of dictionaries with custom keys
-            self.processed = [
+            processed = [
                 dict(zip(self.custom_keys, row))
-                for row in self.raw_df.itertuples(index=False, name=None)
+                for row in df.itertuples(index=False, name=None)
             ]
         else:
             # Use default column names as keys
-            self.processed = self.raw_df.to_dict(orient="records")
+            processed = df.to_dict(orient="records")
+
+        if for_join:
+            self.join_processed = processed
+        else:
+            self.processed = processed
 
         return True
 
@@ -135,6 +163,30 @@ class DataService:
 
         return True
 
+    def _connect_join_countries(self) -> bool:
+        """Helper method to use the join country tables to connect the data
+        node to Country nodes
+
+        Returns:
+            bool: True if successful, False if not
+        """
+
+        # Get and process join country table for the data service
+        self._get_data(for_join=True)
+        self._process_data(for_join=True)
+
+        # Generate ID key for the data service
+        self_id_key = f"{self.node_label.lower()}Id"
+
+        query = f"""
+        UNWIND $data as record
+        MATCH (r: {self.node_label} {{id: record.{self_id_key}}})
+        MATCH (c: Country {{id: record.countryId}})
+        MERGE (r)-[:GIVEN_TO]->(c)
+        """
+
+        return self.query_executor.execute_write(query, self.join_processed)
+
     def populate(self) -> bool:
         """Main high-level method to populate the graph with the nodes
 
@@ -149,3 +201,7 @@ class DataService:
         # Create and connect each data node
         for row in tqdm(self.processed):
             self._create_and_connect(row)
+
+        # Connect countries for data node classes with join country data
+        if self.join_class:
+            self._connect_join_countries()
