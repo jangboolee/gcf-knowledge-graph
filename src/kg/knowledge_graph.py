@@ -20,6 +20,7 @@ from src.kg import (
     ProjectService,
     ReadinessService,
     EntityService,
+    CountryDataService,
 )
 
 
@@ -56,6 +57,7 @@ class KnowledgeGraph:
             "project": ProjectService(self.session),
             "readiness": ReadinessService(self.session),
             "entity": EntityService(self.session),
+            "country": CountryDataService(self.session),
         }
 
     def _open_session(self) -> bool:
