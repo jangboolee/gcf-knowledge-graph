@@ -103,7 +103,6 @@ class DataService:
 
         # Create the main node
         create_query = f"""
-        UNWIND $rows as row
         MERGE (n:{node_label} {{id: $id}})
         ON CREATE SET n += $properties
         RETURN n
