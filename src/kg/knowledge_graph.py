@@ -2,6 +2,7 @@ import logging
 
 from src.kg.db.connection import Connection
 from src.kg.db.query_executor import QueryExecutor
+from src.kg import RegionService
 
 
 class KnowledgeGraph:
@@ -12,7 +13,9 @@ class KnowledgeGraph:
         self.database = "neo4j"
         self.conn = conn
         self.session = None
-        self.query_executor = QueryExecutor()
+        self._open_session()
+        # Instantiate query executor interface
+        self.query_executor = QueryExecutor(self.session)
 
     def _open_session(self) -> bool:
         """Helper method to open a session using the Connection class
@@ -58,7 +61,8 @@ class KnowledgeGraph:
 
     def initialize(self) -> bool:
 
-        pass
+        region_service = RegionService(self.session)
+        region_service.populate()
 
 
 if __name__ == "__main__":
@@ -67,4 +71,6 @@ if __name__ == "__main__":
     conn.connect()
 
     kg = KnowledgeGraph(conn=conn)
+    kg.initialize()
+
     kg.close()
