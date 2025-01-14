@@ -6,6 +6,7 @@ from src.db.db_schema import (
     Project,
     ModalityDict,
     Entity,
+    BmDict,
     SectorDict,
     ThemeDict,
     SizeDict,
@@ -19,6 +20,7 @@ class ProjectExportImporter(BaseXlsxImporter):
         super().__init__(db_handler=db_handler, table_class=Project)
         self.modality_id_mapper = None
         self.entity_id_mapper = None
+        self.bm_id_mapper = None
         self.sector_id_mapper = None
         self.theme_id_mapper = None
         self.size_id_mapper = None
@@ -36,7 +38,7 @@ class ProjectExportImporter(BaseXlsxImporter):
             [
                 self._get_id_mapper(ModalityDict),
                 self._get_id_mapper(Entity, name_col="code"),
-                self._get_id_mapper(ModalityDict),
+                self._get_id_mapper(BmDict),
                 self._get_id_mapper(SectorDict),
                 self._get_id_mapper(ThemeDict),
                 self._get_id_mapper(SizeDict),
@@ -61,21 +63,17 @@ class ProjectExportImporter(BaseXlsxImporter):
         # Map IDs using names
         self._map_ids(df, "Modality", "modality_id", self.modality_id_mapper)
         self._map_ids(df, "Entity", "entity_id", self.entity_id_mapper)
+        self._map_ids(df, "BM", "bm_id", self.bm_id_mapper)
         self._map_ids(df, "Sector", "sector_id", self.sector_id_mapper)
         self._map_ids(df, "Theme", "theme_id", self.theme_id_mapper)
         self._map_ids(df, "Project Size", "size_id", self.size_id_mapper)
         self._map_ids(
             df, "ESS Category", "ess_category_id", self.esscategory_id_mapper
         )
-        # Remove "B." string from BM columns while keeping NaN values
-        df["BM"] = (
-            df["BM"]
-            .str.removeprefix("B.")
-            .pipe(pd.to_numeric, errors="coerce")
-        )
         # Re-arrange columns
         self._move_col(df, "modality_id", 1)
         self._move_col(df, "entity_id", 3)
+        self._move_col(df, "entity_id", 4)
         self._move_col(df, "FA Financing", 9)
         # Rename columns
         df.columns = self.cols

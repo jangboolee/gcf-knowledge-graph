@@ -7,6 +7,7 @@ from src.db.db_schema import (
     CountryDict,
     EntityTypeDict,
     StageDict,
+    BmDict,
     SizeDict,
     SectorDict,
 )
@@ -19,6 +20,7 @@ class EntityExportImporter(BaseXlsxImporter):
         self.country_id_mapper = None
         self.entitytype_id_mapper = None
         self.stage_id_mapper = None
+        self.bm_id_mapper = None
         self.size_id_mapper = None
         self.sector_id_mapper = None
 
@@ -35,6 +37,7 @@ class EntityExportImporter(BaseXlsxImporter):
                 self._get_id_mapper(CountryDict, name_col="iso3"),
                 self._get_id_mapper(EntityTypeDict),
                 self._get_id_mapper(StageDict),
+                self._get_id_mapper(BmDict),
                 self._get_id_mapper(SizeDict),
                 self._get_id_mapper(SectorDict),
             ]
@@ -59,22 +62,18 @@ class EntityExportImporter(BaseXlsxImporter):
         df.drop("Country", axis=1, inplace=True)
         # Trim leading whitespaces
         df["Size"] = df["Size"].str.lstrip()
-        # Remove "B." string from BM columns while keeping NaN values
-        df["BM"] = (
-            df["BM"]
-            .str.removeprefix("B.")
-            .pipe(pd.to_numeric, errors="coerce")
-        )
         # Map IDs from names
         self._map_ids(df, "iso3", "country_id", self.country_id_mapper)
         self._map_ids(df, "Type", "entity_type_id", self.entitytype_id_mapper)
         self._map_ids(df, "Stage", "stage_id", self.stage_id_mapper)
+        self._map_ids(df, "BM", "bm_id", self.bm_id_mapper)
         self._map_ids(df, "Size", "size_id", self.size_id_mapper)
         self._map_ids(df, "Sector", "sector_id", self.sector_id_mapper)
         # Move ID columns
         self._move_col(df, "country_id", 2)
         self._move_col(df, "entity_type_id", 4)
         self._move_col(df, "stage_id", 5)
+        self._move_col(df, "bm_id", 6)
         self._move_col(df, "size_id", 7)
         self._move_col(df, "sector_id", 8)
         # Rename columns
