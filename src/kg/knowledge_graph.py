@@ -10,6 +10,11 @@ from src.kg import (
     EssCategoryService,
     ModalityService,
     RegionService,
+    SectorService,
+    SizeService,
+    StageService,
+    StatusService,
+    ThemeService,
 )
 
 
@@ -72,12 +77,17 @@ class KnowledgeGraph:
         # Initialize node services for populating nodes
         services = [
             ActivityTypeService(self.session),
-            RegionService(self.session),
             CountryService(self.session),
             DeliveryPartnerService(self.session),
             EntityTypeService(self.session),
             EssCategoryService(self.session),
             ModalityService(self.session),
+            RegionService(self.session),
+            SectorService(self.session),
+            SizeService(self.session),
+            StageService(self.session),
+            StatusService(self.session),
+            ThemeService(self.session),
         ]
 
         # Initialize and populate each service
