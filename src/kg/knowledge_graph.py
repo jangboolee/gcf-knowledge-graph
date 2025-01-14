@@ -32,8 +32,8 @@ class KnowledgeGraph:
         self._open_session()
         # Instantiate singleton query executor interface
         self.query_executor = QueryExecutor(self.session)
-        # Service classes for each node type
-        self.services = {
+        # Service classes for each metadata node type
+        self.meta_services = {
             "activity_type": ActivityTypeService(self.session),
             "country": CountryService(self.session),
             "delivery_partner": DeliveryPartnerService(self.session),
@@ -91,14 +91,15 @@ class KnowledgeGraph:
         return all([self._close_session(), self.conn.close()])
 
     def initialize(self) -> bool:
-        """Main method to initialize the GCF Knowledge Graph with all nodes
+        """Main method to initialize the GCF Knowledge Graph with all
+        metadata nodes
 
         Returns:
             bool: True after completion
         """
 
         # Initialize and populate each service
-        for service in self.services.values():
+        for service in self.meta_services.values():
             service.populate()
 
         return True

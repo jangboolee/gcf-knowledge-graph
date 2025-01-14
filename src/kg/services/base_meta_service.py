@@ -8,7 +8,7 @@ from src.db.db_handler import DBHandler
 from src.kg.db.query_executor import QueryExecutor
 
 
-class NodeService:
+class MetaService:
 
     def __init__(
         self, session: Session, table_class: Type[DeclarativeMeta]
