@@ -67,7 +67,7 @@ class Entity(Base):
     country_id: Mapped[int] = mapped_column(
         ForeignKey("country_dict.id"), nullable=False
     )
-    is_DAE: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    is_dae: Mapped[bool] = mapped_column(Boolean, nullable=False)
     entity_type_id: Mapped[int] = mapped_column(
         ForeignKey("entity_type_dict.id"), nullable=False
     )
@@ -136,8 +136,8 @@ class Readiness(Base):
     region_id: Mapped[int] = mapped_column(
         ForeignKey("region_dict.id"), nullable=True
     )
-    is_sids: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    is_ldc: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    has_sids: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    has_ldc: Mapped[bool] = mapped_column(Boolean, nullable=False)
     is_nap: Mapped[bool] = mapped_column(Boolean, nullable=False)
     status_id: Mapped[int] = mapped_column(
         ForeignKey("status_dict.id"), nullable=False
