@@ -5,6 +5,7 @@ from src.kg.db.connection import Connection
 from src.kg.db.query_executor import QueryExecutor
 from src.kg import (
     ActivityTypeService,
+    BmNodeService,
     CountryService,
     DeliveryPartnerService,
     EntityTypeService,
@@ -16,6 +17,7 @@ from src.kg import (
     StageService,
     StatusService,
     ThemeService,
+    ProjectService,
 )
 
 
@@ -35,6 +37,7 @@ class KnowledgeGraph:
         # Service classes for each metadata node type
         self.meta_services = {
             "activity_type": ActivityTypeService(self.session),
+            "bm": BmNodeService(self.session),
             "country": CountryService(self.session),
             "delivery_partner": DeliveryPartnerService(self.session),
             "entity_type": EntityTypeService(self.session),
@@ -47,6 +50,7 @@ class KnowledgeGraph:
             "status": StatusService(self.session),
             "theme": ThemeService(self.session),
         }
+        self.data_services = {"project": ProjectService(self.session)}
 
     def _open_session(self) -> bool:
         """Helper method to open a session using the Connection class
@@ -104,6 +108,11 @@ class KnowledgeGraph:
 
         return True
 
+    def populate(self) -> bool:
+
+        for service in self.data_services.values():
+            service.populate()
+
 
 if __name__ == "__main__":
 
@@ -112,5 +121,6 @@ if __name__ == "__main__":
 
     kg = KnowledgeGraph(conn=conn)
     kg.initialize()
+    # kg.populate()
 
     kg.close()
