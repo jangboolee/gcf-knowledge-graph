@@ -2,7 +2,12 @@ import logging
 
 from src.kg.db.connection import Connection
 from src.kg.db.query_executor import QueryExecutor
-from src.kg import ActivityTypeService, CountryService, RegionService
+from src.kg import (
+    ActivityTypeService,
+    CountryService,
+    RegionService,
+    DeliveryPartnerService,
+)
 
 
 class KnowledgeGraph:
@@ -65,11 +70,13 @@ class KnowledgeGraph:
         activity_type_service = ActivityTypeService(self.session)
         region_service = RegionService(self.session)
         country_service = CountryService(self.session)
+        dp_service = DeliveryPartnerService(self.session)
 
         # Populate graph with nodes
         activity_type_service.populate()
         region_service.populate()
         country_service.populate()
+        dp_service.populate()
 
 
 if __name__ == "__main__":
