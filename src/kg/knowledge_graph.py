@@ -19,6 +19,7 @@ from src.kg import (
     ThemeService,
     ProjectService,
     ReadinessService,
+    EntityService,
 )
 
 
@@ -54,6 +55,7 @@ class KnowledgeGraph:
         self.data_services = {
             "project": ProjectService(self.session),
             "readiness": ReadinessService(self.session),
+            "entity": EntityService(self.session),
         }
 
     def _open_session(self) -> bool:
@@ -106,14 +108,20 @@ class KnowledgeGraph:
             bool: True after completion
         """
 
-        # Initialize and populate each service
+        # Initialize and populate each metadata service
         for service in self.meta_services.values():
             service.populate()
 
         return True
 
     def populate(self) -> bool:
+        """Main method to populate the GCF Knowledge Graph with all data nodes
 
+        Returns:
+            bool: True after completion
+        """
+
+        # Initialize and populate each data service
         for service in self.data_services.values():
             service.populate()
 
@@ -124,7 +132,7 @@ if __name__ == "__main__":
     conn.connect()
 
     kg = KnowledgeGraph(conn=conn)
-    # kg.initialize()
+    kg.initialize()
     kg.populate()
 
     kg.close()

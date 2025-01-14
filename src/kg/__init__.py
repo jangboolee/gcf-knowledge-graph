@@ -15,3 +15,4 @@ from src.kg.services.meta.status_node_service import StatusService
 from src.kg.services.meta.theme_node_service import ThemeService
 from src.kg.services.data.project_service import ProjectService
 from src.kg.services.data.readiness_service import ReadinessService
+from src.kg.services.data.entity_service import EntityService
