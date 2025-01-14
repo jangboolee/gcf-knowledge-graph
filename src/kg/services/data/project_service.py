@@ -1,14 +1,14 @@
 from neo4j import Session
 
 from src.kg.services.base_data_service import DataService
-from src.db.db_schema import Project
+from src.db.db_schema import Project, ProjectCountry
 
 
 class ProjectService(DataService):
 
     def __init__(self, session: Session) -> None:
 
-        super().__init__(session, Project)
+        super().__init__(session, Project, ProjectCountry)
         self.node_label = "Project"
         self.properties = ["id", "name", "ref", "financingUsd"]
         self.relationships = {
