@@ -1,8 +1,8 @@
-from src.kg.services.base_node_service import NodeService
-from src.db.db_schema import CountryDict, Country
-
 from neo4j import Session
 import pandas as pd
+
+from src.kg.services.base_node_service import NodeService
+from src.db.db_schema import CountryDict, Country
 
 
 class CountryService(NodeService):
