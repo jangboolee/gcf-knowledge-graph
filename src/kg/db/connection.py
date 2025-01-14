@@ -1,4 +1,3 @@
-from pathlib import Path
 import os
 import logging
 
@@ -14,8 +13,6 @@ from neo4j.exceptions import (
 class Connection:
 
     def __init__(self) -> None:
-
-        self.db_uri = Path(".") / "data" / "gcf_data.db"
 
         # Environment variables for graph connection
         self.kg_uri = os.environ.get("URI")
