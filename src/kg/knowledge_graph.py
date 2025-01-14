@@ -18,6 +18,7 @@ from src.kg import (
     StatusService,
     ThemeService,
     ProjectService,
+    ReadinessService,
 )
 
 
@@ -50,7 +51,10 @@ class KnowledgeGraph:
             "status": StatusService(self.session),
             "theme": ThemeService(self.session),
         }
-        self.data_services = {"project": ProjectService(self.session)}
+        self.data_services = {
+            "project": ProjectService(self.session),
+            "readiness": ReadinessService(self.session),
+        }
 
     def _open_session(self) -> bool:
         """Helper method to open a session using the Connection class
