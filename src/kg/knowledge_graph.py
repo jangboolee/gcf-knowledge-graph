@@ -126,15 +126,3 @@ class KnowledgeGraph:
         # Initialize and populate each data service
         for service in self.data_services.values():
             service.populate()
-
-
-if __name__ == "__main__":
-
-    conn = Connection()
-    conn.connect()
-
-    kg = KnowledgeGraph(conn=conn)
-    kg.initialize()
-    kg.populate()
-
-    kg.close()
