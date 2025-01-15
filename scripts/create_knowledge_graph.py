@@ -8,7 +8,10 @@ def main():
     conn.connect()
 
     kg = KnowledgeGraph(conn=conn)
+
+    # Initialize graph with metadata nodes
     kg.initialize()
+    # Populate graph with data nodes
     kg.populate()
 
     kg.close()
