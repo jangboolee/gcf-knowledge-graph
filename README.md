@@ -19,10 +19,10 @@ My methodology in doing so was as follows:
 
 The data sources used to populate the tabular and graph databases were:
 * Publicly available data sources from the GCF Open Data Library, all downloaded on 2025-01-12
- * Funded activities ([link](https://data.greenclimate.fund/public/data/projects))
- * Countries ([link](https://data.greenclimate.fund/public/data/countries))
- * Entities ([link](https://data.greenclimate.fund/public/data/entities))
- * Readiness ([link](https://data.greenclimate.fund/public/data/readiness))
+   * Funded activities ([link](https://data.greenclimate.fund/public/data/projects))
+   * Countries ([link](https://data.greenclimate.fund/public/data/countries))
+   * Entities ([link](https://data.greenclimate.fund/public/data/entities))
+   * Readiness ([link](https://data.greenclimate.fund/public/data/readiness))
 * Publicly available ISO 3166 country codes ([link](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv))
 * GCF’s boardroom web page for the range of board meeting numbers ([link](https://www.greenclimate.fund/boardroom/meetings)) 
 
@@ -81,8 +81,8 @@ Points to note:
 The biggest advantages of a knowledge graph representation of data over a tabular representation of the same data are:
 
 1. The data is easy to understand, because:
- * A graph representation more closely resembles our mental models compared to rows and columns
- * A graph is visual in nature
+   * A graph representation more closely resembles our mental models compared to rows and columns
+   * A graph is visual in nature
 2. Knowledge graphs excels at finding hidden connections between concepts
 3. An intuitive GQL (Graph Query Language), Cypher, can be utilized to query the graph database 
 
