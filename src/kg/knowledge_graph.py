@@ -152,3 +152,5 @@ class KnowledgeGraph:
         # Initialize and populate each data service
         for service in self.data_services.values():
             service.populate()
+
+        return True
