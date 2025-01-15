@@ -34,13 +34,13 @@ class CountryDataService(DataService):
         """
 
         to_write = [
-            {"countryId": i["id"], "regionId": i["regionId"]}
+            {"iso3": i["iso3"], "regionId": i["regionId"]}
             for i in self.processed
         ]
 
         query = """
         UNWIND $data as record
-        MATCH (c: Country {id: record.countryId})
+        MATCH (c: Country {iso3: record.iso3})
         MATCH (r: Region {id: record.regionId})
         MERGE (c)-[:IS_IN]->(r)
         """
