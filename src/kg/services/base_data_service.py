@@ -182,7 +182,7 @@ class DataService:
         UNWIND $data as record
         MATCH (r: {self.node_label} {{id: record.{self_id_key}}})
         MATCH (c: Country {{id: record.countryId}})
-        MERGE (r)-[:GIVEN_TO]->(c)
+        MERGE (r)-[:INVOLVES]->(c)
         """
 
         return self.query_executor.execute_write(query, self.join_processed)
