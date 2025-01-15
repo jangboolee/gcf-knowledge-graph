@@ -8,7 +8,9 @@ class ReadinessService(DataService):
 
     def __init__(self, session: Session) -> None:
 
-        super().__init__(session, Readiness, ReadinessCountry)
+        super().__init__(
+            session, table_class=Readiness, join_class=ReadinessCountry
+        )
         self.node_label = "Readiness"
         self.properties = [
             "id",

@@ -8,7 +8,9 @@ class ProjectService(DataService):
 
     def __init__(self, session: Session) -> None:
 
-        super().__init__(session, Project, ProjectCountry)
+        super().__init__(
+            session, table_class=Project, join_class=ProjectCountry
+        )
         self.node_label = "Project"
         self.properties = ["id", "name", "ref", "financingUsd"]
         self.relationships = {
