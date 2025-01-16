@@ -1,5 +1,8 @@
 # GCF Knowledge Graph
-Knowledge Graph representation of United Nations Global Climate Fund project/programme data
+
+![image](https://github.com/user-attachments/assets/72bc93c7-d674-4578-aba3-376a2f8c7a2e)
+
+A Knowledge Graph of United Nations Global Climate Fund project/programme data
 
 ## Methodology
 
