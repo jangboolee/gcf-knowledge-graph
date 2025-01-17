@@ -1,6 +1,6 @@
 # GCF Knowledge Graph
 
-![image](https://github.com/user-attachments/assets/72bc93c7-d674-4578-aba3-376a2f8c7a2e)
+![live_demo](https://github.com/jangboolee/gcf-knowledge-graph/blob/main/live_demo.gif)
 
 A Knowledge Graph of United Nations Global Climate Fund project/programme data
 
