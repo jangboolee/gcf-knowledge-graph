@@ -1,16 +1,15 @@
 import logging
 from typing import Type
 
+import country_converter as coco
 import pandas as pd
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import DeclarativeMeta
-import country_converter as coco
 
 from src.db.db_handler import DBHandler
 
 
 class BaseXlsxImporter:
-
     def __init__(
         self, db_handler: DBHandler, table_class: Type[DeclarativeMeta]
     ) -> None:

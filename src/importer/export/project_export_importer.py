@@ -1,21 +1,20 @@
 import pandas as pd
 
-from src.importer.base_xlsx_importer import BaseXlsxImporter
 from src.db.db_handler import DBHandler
 from src.db.db_schema import (
-    Project,
-    ModalityDict,
-    Entity,
     BmDict,
-    SectorDict,
-    ThemeDict,
-    SizeDict,
+    Entity,
     EssCategoryDict,
+    ModalityDict,
+    Project,
+    SectorDict,
+    SizeDict,
+    ThemeDict,
 )
+from src.importer.base_xlsx_importer import BaseXlsxImporter
 
 
 class ProjectExportImporter(BaseXlsxImporter):
-
     def __init__(self, db_handler: DBHandler) -> None:
         super().__init__(db_handler=db_handler, table_class=Project)
         self.modality_id_mapper = None

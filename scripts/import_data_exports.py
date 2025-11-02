@@ -1,16 +1,15 @@
 from pathlib import Path
 
+from src.db.db_handler import DBHandler
 from src.importer.export import (
     CountryExportImporter,
     EntityExportImporter,
     ProjectExportImporter,
     ReadinessExportImporter,
 )
-from src.db.db_handler import DBHandler
 
 
 def main():
-
     # Instantiate DB Handler and data export importers
     db_handler = DBHandler()
     importers = [
@@ -37,5 +36,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()

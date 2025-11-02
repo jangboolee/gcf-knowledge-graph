@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from src.db.db_handler import DBHandler
 from src.importer.data_dict import (
     ActivityTypeDictImporter,
     BmDictImporter,
@@ -8,18 +9,16 @@ from src.importer.data_dict import (
     EntityTypeDictImporter,
     EssCategoryDictImporter,
     ModalityDictImporter,
-    SizeDictImporter,
     RegionDictImporter,
     SectorDictImporter,
+    SizeDictImporter,
     StageDictImporter,
     StatusDictImporter,
     ThemeDictImporter,
 )
-from src.db.db_handler import DBHandler
 
 
 def main():
-
     # Instantiate DB Handler and data dictionary importers
     db_handler = DBHandler()
     importers = [
@@ -64,5 +63,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()
