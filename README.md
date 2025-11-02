@@ -41,11 +41,11 @@ Points to note:
 * I took some liberties with the table and column names, mainly to adhere to RDBMS naming convention best practices
 * Columns with multiple values in a single cell (ex: `Countries` column from the Funded Activities export file) were dropped from the original tables. Then, join tables with one value per cell were reverse-engineered using Python (ex: `table project_country`).
 * Any calculation values (ex: number of readiness projects per country in the Country export file) were dropped to keep only raw data in the files
-* Row 49 of the `Entity` export file seemed to contain a data inconsistency where the single Entity had multiple size values and was manually reconciled (details below)
+* Row 58 of the `Entity` export file seemed to contain a data inconsistency where the single Entity had multiple size values and was manually reconciled (details below)
 
 ### Manual data inconsistency reconciliation
 
-Row 49 of the entity export seemed to contain a data inconsistency, where it is the only record within the entity export file that contains multiple values in the `Size` column:
+Row 58 of the entity export seemed to contain a data inconsistency, where it is the only record within the entity export file that contains multiple values in the `Size` column:
 
 | field        | value                                                                                            |
 | ------------ | ------------------------------------------------------------------------------------------------ |
@@ -61,11 +61,11 @@ Row 49 of the entity export seemed to contain a data inconsistency, where it is 
 | \# Approved  | 2                                                                                                |
 | FA Financing | 52706595                                                                                         |
 
-Since it is unreasonable to assume that a single entity will have multiple sizes, it is more reasonable to assume that the `Size` column refers to the sizes of the projects carried out by the entity. However, when referring to the project export file, we see that the `DOE_ATG` entity has 2 projects in rows 53 and 120, both with the size `Small`, which is inconsistent with the values of the `Size` column in row 49 of the entity export:
+Since it is unreasonable to assume that a single entity will have multiple sizes, it is more reasonable to assume that the `Size` column refers to the sizes of the projects carried out by the entity. However, when referring to the project export file, we see that the `DOE_ATG` entity has 2 projects in rows 53 and 120, both with the size `Small`, which is inconsistent with the values of the `Size` column in row 58 of the entity export:
 
 ![image](https://github.com/user-attachments/assets/441180e0-e315-46e2-ad0a-b4b679f57391)
 
-To reconcile the data inconsistency, I have manually removed the value `Medium` from the `Size` column of row 49, so that the `DOE_ATG` entity only has the `Small` value in the column `Size`.
+To reconcile the data inconsistency, I have manually removed the value `Medium` from the `Size` column of row 58, so that the `DOE_ATG` entity only has the `Small` value in the column `Size`.
 
 ## Graph data model
 
